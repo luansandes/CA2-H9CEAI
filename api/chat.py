@@ -78,7 +78,9 @@ class handler(BaseHTTPRequestHandler):
 
             client = OpenAI()
             response = client.responses.create(
-                model=os.environ.get("OPENAI_MODEL", "gpt-5.6-sol"),
+                model=os.environ.get(
+                    "OPENAI_MODEL", "gpt-5.4-nano-2026-03-17"
+                ),
                 instructions=(
                     "You are a helpful, concise assistant. Answer clearly and be honest "
                     "when you are uncertain."
@@ -91,4 +93,3 @@ class handler(BaseHTTPRequestHandler):
         except Exception as error:
             print(f"Chat request failed: {error}")
             self._send_json(500, {"error": "The assistant is temporarily unavailable."})
-

@@ -29,12 +29,13 @@ set its URL in `config.js`.
 1. Import this GitHub repository as a new Vercel project.
 2. In **Settings > Environment Variables**, add:
    - `OPENAI_API_KEY`: your secret OpenAI API key
-   - `OPENAI_MODEL`: optional; defaults to `gpt-5.6-sol`
+   - `OPENAI_MODEL`: optional; defaults to `gpt-5.4-nano-2026-03-17`
    - `FRONTEND_ORIGIN`: `https://luansandes.github.io`
 3. Deploy. Vercel will expose `/api/chat` and `/api/health`.
-4. Confirm `https://YOUR-PROJECT.vercel.app/api/health` returns `{"status":"ok"}`.
-5. Replace the placeholder URL in `config.js` with the deployed `/api/chat` URL,
-   commit, and push again.
+4. Confirm `https://ca-2-h9-ceai-teal.vercel.app/api/health` returns
+   `{"status":"ok"}`.
+5. The frontend is configured to call
+   `https://ca-2-h9-ceai-teal.vercel.app/api/chat`.
 
 Never commit `.env` or a real API key. `.env.example` contains names only.
 
@@ -71,4 +72,3 @@ owns conversation state; this scaffold does not persist chats or identify users.
 - Add abuse protection or authentication before sharing the endpoint broadly.
 - Add rate limits and request logging appropriate for your privacy requirements.
 - Pin dependencies after validating a deployment.
-

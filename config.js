@@ -1,5 +1,3 @@
-// Replace this after Vercel gives the backend its production URL.
 window.APP_CONFIG = {
-  apiUrl: "https://YOUR-VERCEL-PROJECT.vercel.app/api/chat",
+  apiUrl: "https://ca-2-h9-ceai-teal.vercel.app/api/chat",
 };
-
