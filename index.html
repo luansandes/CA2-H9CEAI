@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A lightweight AI chat interface backed by OpenAI and deployed on Vercel."
+    />
+    <title>AI Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <main class="app-shell">
+      <header class="app-header">
+        <div>
+          <p class="eyebrow">CA2 · H9CEAI</p>
+          <h1>Your AI assistant</h1>
+          <p class="subtitle">Ask a question and continue the conversation.</p>
+        </div>
+        <button id="clear-button" class="secondary-button" type="button">
+          New chat
+        </button>
+      </header>
+
+      <section
+        id="messages"
+        class="messages"
+        aria-live="polite"
+        aria-label="Conversation"
+      >
+        <article class="message assistant-message">
+          <div class="avatar" aria-hidden="true">AI</div>
+          <div class="message-body">
+            <span class="message-author">Assistant</span>
+            <p>Hi! What would you like to explore today?</p>
+          </div>
+        </article>
+      </section>
+
+      <form id="chat-form" class="composer">
+        <label class="sr-only" for="message-input">Message</label>
+        <textarea
+          id="message-input"
+          name="message"
+          rows="1"
+          maxlength="8000"
+          placeholder="Type your message…"
+          autocomplete="off"
+          required
+        ></textarea>
+        <button id="send-button" class="send-button" type="submit">
+          <span>Send</span>
+          <span aria-hidden="true">↑</span>
+        </button>
+        <p id="status" class="status" role="status"></p>
+      </form>
+    </main>
+
+    <script src="./config.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
+

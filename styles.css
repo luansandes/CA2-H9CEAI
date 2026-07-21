@@ -1,0 +1,266 @@
+:root {
+  color-scheme: light;
+  font-family: "DM Sans", system-ui, sans-serif;
+  color: #17201c;
+  background: #edf2ed;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-width: 320px;
+  min-height: 100vh;
+  margin: 0;
+  background:
+    radial-gradient(circle at 15% 10%, rgba(239, 188, 120, 0.28), transparent 32rem),
+    radial-gradient(circle at 90% 90%, rgba(78, 128, 100, 0.18), transparent 30rem),
+    #edf2ed;
+}
+
+button,
+textarea {
+  font: inherit;
+}
+
+button {
+  cursor: pointer;
+}
+
+.app-shell {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  width: min(920px, calc(100% - 32px));
+  min-height: calc(100vh - 48px);
+  margin: 24px auto;
+  overflow: hidden;
+  background: rgba(250, 252, 249, 0.92);
+  border: 1px solid rgba(35, 65, 49, 0.12);
+  border-radius: 28px;
+  box-shadow: 0 24px 80px rgba(34, 62, 47, 0.14);
+  backdrop-filter: blur(18px);
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 28px 32px 24px;
+  border-bottom: 1px solid #dce5dd;
+}
+
+.eyebrow,
+.subtitle,
+.app-header h1 {
+  margin: 0;
+}
+
+.eyebrow {
+  margin-bottom: 6px;
+  color: #b56332;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.app-header h1 {
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
+  letter-spacing: -0.04em;
+}
+
+.subtitle {
+  margin-top: 6px;
+  color: #64736b;
+}
+
+.secondary-button {
+  flex: 0 0 auto;
+  padding: 10px 16px;
+  color: #315a44;
+  background: transparent;
+  border: 1px solid #bdd0c3;
+  border-radius: 999px;
+  font-weight: 600;
+}
+
+.secondary-button:hover {
+  background: #edf5ef;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+  min-height: 340px;
+  max-height: calc(100vh - 300px);
+  padding: 30px 32px;
+  overflow-y: auto;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  max-width: 82%;
+}
+
+.user-message {
+  align-self: flex-end;
+  flex-direction: row-reverse;
+}
+
+.avatar {
+  display: grid;
+  flex: 0 0 38px;
+  width: 38px;
+  height: 38px;
+  place-items: center;
+  color: #fff;
+  background: #315a44;
+  border-radius: 12px;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.user-message .avatar {
+  background: #c87442;
+}
+
+.message-body {
+  padding: 13px 16px;
+  background: #edf3ee;
+  border-radius: 4px 18px 18px;
+}
+
+.user-message .message-body {
+  background: #f6e4d8;
+  border-radius: 18px 4px 18px 18px;
+}
+
+.message-author {
+  display: block;
+  margin-bottom: 4px;
+  color: #68776f;
+  font-size: 0.72rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.message-body p {
+  margin: 0;
+  line-height: 1.6;
+  overflow-wrap: anywhere;
+  white-space: pre-wrap;
+}
+
+.composer {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+  padding: 20px 32px 26px;
+  background: #f8faf7;
+  border-top: 1px solid #dce5dd;
+}
+
+.composer textarea {
+  width: 100%;
+  max-height: 180px;
+  padding: 14px 16px;
+  resize: none;
+  color: #17201c;
+  background: #fff;
+  border: 1px solid #cbd8cd;
+  border-radius: 16px;
+  outline: none;
+}
+
+.composer textarea:focus {
+  border-color: #4e8064;
+  box-shadow: 0 0 0 4px rgba(78, 128, 100, 0.12);
+}
+
+.send-button {
+  display: flex;
+  align-items: center;
+  align-self: end;
+  gap: 8px;
+  min-height: 50px;
+  padding: 0 20px;
+  color: #fff;
+  background: #315a44;
+  border: 0;
+  border-radius: 16px;
+  font-weight: 700;
+}
+
+.send-button:hover {
+  background: #254a36;
+}
+
+.send-button:disabled,
+.secondary-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.status {
+  grid-column: 1 / -1;
+  min-height: 18px;
+  margin: 0;
+  color: #a24638;
+  font-size: 0.82rem;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+@media (max-width: 640px) {
+  .app-shell {
+    width: 100%;
+    min-height: 100vh;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
+  .app-header,
+  .messages,
+  .composer {
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .app-header {
+    align-items: flex-start;
+  }
+
+  .subtitle {
+    display: none;
+  }
+
+  .messages {
+    max-height: none;
+  }
+
+  .message {
+    max-width: 94%;
+  }
+
+  .send-button span:first-child {
+    display: none;
+  }
+}
+
