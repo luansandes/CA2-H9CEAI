@@ -6,7 +6,12 @@ const clearButton = document.querySelector("#clear-button");
 const statusElement = document.querySelector("#status");
 
 const conversation = [];
-const apiUrl = window.APP_CONFIG?.apiUrl;
+const defaultApiUrl = "https://ca-2-h9-ceai-teal.vercel.app/api/chat";
+const configuredApiUrl = window.APP_CONFIG?.apiUrl;
+const apiUrl =
+  configuredApiUrl && !configuredApiUrl.includes("YOUR-VERCEL-PROJECT")
+    ? configuredApiUrl
+    : defaultApiUrl;
 
 function addMessage(role, content) {
   const article = document.createElement("article");
@@ -51,10 +56,6 @@ function resetChat() {
 }
 
 async function sendMessage(content) {
-  if (!apiUrl || apiUrl.includes("YOUR-VERCEL-PROJECT")) {
-    throw new Error("Set your deployed backend URL in config.js before chatting.");
-  }
-
   conversation.push({ role: "user", content });
   addMessage("user", content);
   setLoading(true);
@@ -115,4 +116,3 @@ input.addEventListener("keydown", (event) => {
 });
 
 clearButton.addEventListener("click", resetChat);
-
