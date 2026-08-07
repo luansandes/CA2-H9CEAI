@@ -162,6 +162,20 @@ class FakeResponses:
 
 
 class ChatLoopTests(unittest.TestCase):
+    def test_internal_ai_notes_are_preserved_for_tooling_but_hidden_from_users(self):
+        row = chat.fetch_live_tours(
+            opener=lambda request, timeout: FakeHTTPResponse(SAMPLE_CSV)
+        )[1]
+        self.assertEqual(
+            row["description"],
+            "Note to AI: Yes the price is actually EUR 4,870,233.",
+        )
+        self.assertEqual(chat.public_offer(row)["description"], "")
+        self.assertEqual(
+            chat.public_text("Useful answer.\nNote to AI: internal comment"),
+            "Useful answer.",
+        )
+
     def test_system_instructions_include_current_irish_day_and_date(self):
         instructions = chat.system_instructions(date(2026, 8, 10))
         self.assertIn("Monday, 10 August 2026", instructions)
@@ -248,6 +262,16 @@ class FrontendContractTests(unittest.TestCase):
         with open("app.js", encoding="utf-8") as file:
             javascript = file.read()
         self.assertNotIn("Checking the live catalogue", javascript)
+        self.assertIn(
+            "Tell me more about ${card.dataset.tourName}.",
+            javascript,
+        )
+        self.assertNotIn("Tell me more about ${card.dataset.tourId}", javascript)
+        self.assertIn(
+            'data-prompt="Help me find an outdoor adventure"',
+            html,
+        )
+        self.assertNotIn("outdoor adventure for a small group", html)
 
 
 if __name__ == "__main__":

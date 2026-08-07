@@ -57,6 +57,10 @@ CARD_FIELDS = (
 
 PROMPT_PATH = Path(__file__).with_name("system_prompt.txt")
 SYSTEM_PROMPT = PROMPT_PATH.read_text(encoding="utf-8").strip()
+INTERNAL_NOTE_PATTERN = re.compile(
+    r"\bnotes?\s+to\s+ai\s*:[^\n]*(?:\n|$)",
+    flags=re.IGNORECASE,
+)
 
 
 def ireland_today():
@@ -76,6 +80,14 @@ def system_instructions(today=None):
         "- Resolve relative dates such as today, tomorrow, this weekend, and next "
         "Monday against this date."
     )
+
+
+def public_text(value):
+    return INTERNAL_NOTE_PATTERN.sub("\n", str(value or "")).strip()
+
+
+def public_offer(row):
+    return {field: public_text(row.get(field, "")) for field in CARD_FIELDS}
 
 
 class TourDataError(RuntimeError):
@@ -397,7 +409,7 @@ def create_chat_response(messages, client=None):
             except (TypeError, json.JSONDecodeError) as error:
                 raise RuntimeError("The assistant returned an invalid response.") from error
 
-            message = str(result.get("message") or "").strip().replace("**", "")
+            message = public_text(result.get("message")).replace("**", "")
             if not message:
                 raise RuntimeError("The assistant returned an empty response.")
 
@@ -416,7 +428,7 @@ def create_chat_response(messages, client=None):
                 if tour_id in seen or tour_id not in live_rows:
                     continue
                 seen.add(tour_id)
-                offers.append({field: live_rows[tour_id].get(field, "") for field in CARD_FIELDS})
+                offers.append(public_offer(live_rows[tour_id]))
                 if len(offers) >= MAX_OFFERS:
                     break
             return {"message": message, "offers": offers}

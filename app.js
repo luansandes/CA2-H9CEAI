@@ -208,9 +208,7 @@ input.addEventListener("keydown", (event) => {
 messagesElement.addEventListener("click", (event) => {
   const card = event.target.closest(".offer-card");
   if (!card || card.disabled) return;
-  submitContent(
-    `Tell me more about ${card.dataset.tourId} — ${card.dataset.tourName}. Please check the live details and help me decide if it suits me.`,
-  );
+  submitContent(`Tell me more about ${card.dataset.tourName}.`);
 });
 
 startersElement.addEventListener("click", (event) => {
