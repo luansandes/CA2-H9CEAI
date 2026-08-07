@@ -14,7 +14,7 @@ and retrieves date-specific weather from Open-Meteo.
 - `api/health.py`: lightweight deployment health check
 - `.github/workflows/pages.yml`: GitHub Pages deployment workflow
 - [`docs/atlantic-coast-tours-architecture.drawio`](docs/atlantic-coast-tours-architecture.drawio): editable diagrams.net solution architecture
-- [`docs/atlantic-coast-tours-architecture-technical.png`](docs/atlantic-coast-tours-architecture-technical.png): publication-ready architecture figure
+- [`docs/atlantic-coast-tours-architecture-technical-v2.png`](docs/atlantic-coast-tours-architecture-technical-v2.png): current publication-ready architecture figure
 
 The browser retains the current conversation in memory. Chats are not persisted,
 and selecting an offer card continues the conversation rather than making a
