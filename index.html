@@ -5,65 +5,88 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta
       name="description"
-      content="A lightweight AI chat interface backed by OpenAI and deployed on Vercel."
+      content="Chat with Atlantic Coast Tours' AI assistant to discover live tours and weather across the west of Ireland."
     />
-    <title>AI Chat</title>
+    <meta name="theme-color" content="#073b3a" />
+    <title>Atlantic Coast Tours · AI Travel Assistant</title>
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap"
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Newsreader:opsz,wght@6..72,600&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="./styles.css?v=2" />
+    <link rel="stylesheet" href="./styles.css?v=3" />
   </head>
   <body>
     <main class="app-shell">
       <header class="app-header">
-        <div>
-          <p class="eyebrow">CA2 · H9CEAI</p>
-          <h1>Your AI assistant</h1>
-          <p class="subtitle">Ask a question and continue the conversation.</p>
+        <div class="brand-lockup">
+          <div class="brand-mark" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </div>
+          <div>
+            <p class="eyebrow">West of Ireland</p>
+            <h1>Atlantic Coast Tours</h1>
+            <p class="subtitle">Your local AI guide to the wild Atlantic edge</p>
+          </div>
         </div>
-        <button id="clear-button" class="secondary-button" type="button">
-          New chat
-        </button>
+        <div class="header-actions">
+          <span class="live-status"><span aria-hidden="true"></span>Live catalogue</span>
+          <button id="clear-button" class="secondary-button" type="button">New chat</button>
+        </div>
       </header>
 
-      <section
-        id="messages"
-        class="messages"
-        aria-live="polite"
-        aria-label="Conversation"
-      >
-        <article class="message assistant-message">
-          <div class="avatar" aria-hidden="true">AI</div>
-          <div class="message-body">
-            <span class="message-author">Assistant</span>
-            <p>Hi! What would you like to explore today?</p>
-          </div>
-        </article>
-      </section>
+      <div class="chat-stage">
+        <section
+          id="messages"
+          class="messages"
+          aria-live="polite"
+          aria-label="Conversation with the Atlantic Coast Tours AI assistant"
+        >
+          <article class="message assistant-message">
+            <div class="avatar" aria-hidden="true">AC</div>
+            <div class="message-content">
+              <span class="message-author">Atlantic AI</span>
+              <div class="message-body">
+                <p>Hi, I’m Atlantic Coast Tours’ AI travel assistant. I can search our live tour catalogue, recommend experiences, explain current offers and availability, and check relevant weather forecasts when you share a date and location.</p>
+                <p>My guidance is informational, and I can’t confirm bookings or payments.</p>
+              </div>
+            </div>
+          </article>
+        </section>
+
+        <div id="starters" class="starters" aria-label="Suggested questions">
+          <button type="button" data-prompt="Show me tours with a special offer.">Special offers</button>
+          <button type="button" data-prompt="Help me find an outdoor adventure for a small group.">Outdoor adventure</button>
+          <button type="button" data-prompt="What tours are available around Galway?">Explore Galway</button>
+        </div>
+      </div>
 
       <form id="chat-form" class="composer">
-        <label class="sr-only" for="message-input">Message</label>
-        <textarea
-          id="message-input"
-          name="message"
-          rows="1"
-          maxlength="8000"
-          placeholder="Type your message…"
-          autocomplete="off"
-          required
-        ></textarea>
+        <label class="sr-only" for="message-input">Ask about a west of Ireland tour</label>
+        <div class="input-wrap">
+          <textarea
+            id="message-input"
+            name="message"
+            rows="1"
+            maxlength="8000"
+            placeholder="Ask about tours, dates, locations or weather…"
+            autocomplete="off"
+            required
+          ></textarea>
+          <span class="input-hint">Enter to send · Shift + Enter for a new line</span>
+        </div>
         <button id="send-button" class="send-button" type="submit">
           <span>Send</span>
-          <span aria-hidden="true">↑</span>
+          <svg viewBox="0 0 20 20" aria-hidden="true">
+            <path d="M3.5 10h12M11 5.5l4.5 4.5-4.5 4.5" />
+          </svg>
         </button>
         <p id="status" class="status" role="status"></p>
       </form>
     </main>
 
-    <script src="./config.js?v=2"></script>
-    <script src="./app.js?v=2"></script>
+    <script src="./config.js?v=3"></script>
+    <script src="./app.js?v=3"></script>
   </body>
 </html>

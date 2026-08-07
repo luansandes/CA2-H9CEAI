@@ -1,50 +1,96 @@
-# CA2-H9CEAI chat scaffold
+# Atlantic Coast Tours AI assistant
 
-A static, user-facing chat hosted on GitHub Pages, backed by a Python serverless
-function on Vercel. The OpenAI API key exists only in Vercel's environment and
-is never sent to the browser.
+A pilot, user-facing travel chat for Atlantic Coast Tours. The static frontend is
+hosted on GitHub Pages and calls a Python serverless API on Vercel. The backend
+uses OpenAI's Responses API, reads the tour catalogue live from Google Sheets,
+and retrieves date-specific weather from Open-Meteo.
 
 ## Architecture
 
-- `index.html`, `styles.css`, `app.js`: zero-build GitHub Pages frontend
-- `config.js`: public backend endpoint configuration
-- `api/chat.py`: validated chat endpoint using OpenAI's Responses API
+- `index.html`, `styles.css`, `app.js`: zero-build, single-page chat interface
+- `config.js`: public Vercel endpoint configuration
+- `api/chat.py`: validation, Responses API tool loop, live sheet reads, and weather
+- `api/system_prompt.txt`: inspectable assistant instructions, cached at cold start
 - `api/health.py`: lightweight deployment health check
 - `.github/workflows/pages.yml`: GitHub Pages deployment workflow
 
-## Run the frontend locally
+The browser retains the current conversation in memory. Chats are not persisted,
+and selecting an offer card continues the conversation rather than making a
+booking.
 
-The production backend only allows configured browser origins. Local port 8000
-is allowed for development:
+## Data behavior
+
+Tour data is read-only and comes from this public Google Sheet tab:
+
+`https://docs.google.com/spreadsheets/d/1balBGf8QhZ5dc-RCCAPt2kcrcf6m_YRh0HL_r8bBtJw/edit?gid=120683740`
+
+Every catalogue tool call issues a new GET request to the CSV export with
+no-cache headers and a unique query parameter. The application does not store,
+copy, mirror, update, or hardcode sheet rows. Relevant cell values are sent to
+the model as curated business data and cards are hydrated only from rows read
+during the current request.
+
+When a concrete date and tour location are known, the backend geocodes the
+location and requests a live forecast from Open-Meteo. Forecasts outside the
+supported window are reported as unavailable.
+
+## Run locally
+
+Install the backend dependency and expose the required environment variables:
 
 ```powershell
+python -m pip install -r requirements.txt
+$env:OPENAI_API_KEY = "your-key"
+$env:OPENAI_MODEL = "gpt-5.6-luna"
+$env:FRONTEND_ORIGIN = "http://localhost:8000"
 python -m http.server 8000
 ```
 
-Open `http://localhost:8000`. To chat against a deployed backend, temporarily
-set its URL in `config.js`.
+Open `http://localhost:8000`. The static site will call the deployed Vercel API
+configured in `config.js`.
+
+Run the local automated checks with:
+
+```powershell
+python -m unittest discover -s tests -v
+```
+
+The tests mock external services and never modify the Google Sheet.
 
 ## Deploy the backend to Vercel
 
-1. Import this GitHub repository as a new Vercel project.
-2. In **Settings > Environment Variables**, add:
-   - `OPENAI_API_KEY`: your secret OpenAI API key
-   - `OPENAI_MODEL`: optional; defaults to `gpt-5.4-nano-2026-03-17`
-   - `FRONTEND_ORIGIN`: `https://luansandes.github.io`
-3. Deploy. Vercel will expose `/api/chat` and `/api/health`.
-4. Confirm `https://ca-2-h9-ceai-teal.vercel.app/api/health` returns
-   `{"status":"ok"}`.
-5. The frontend is configured to call
-   `https://ca-2-h9-ceai-teal.vercel.app/api/chat`.
+When importing the GitHub repository in Vercel, use:
 
-Never commit `.env` or a real API key. `.env.example` contains names only.
+- Framework preset: **Other**
+- Root directory: `.` (the repository root)
+- Build command: leave empty
+- Output directory: leave empty
+- Install command: leave at the Vercel default
+
+Add these variables in **Project Settings > Environment Variables**:
+
+- `OPENAI_API_KEY`: the secret OpenAI API key
+- `OPENAI_MODEL`: `gpt-5.6-luna`
+- `FRONTEND_ORIGIN`: `https://luansandes.github.io`
+
+Deploy and verify:
+
+- Health: `https://ca-2-h9-ceai-teal.vercel.app/api/health`
+- Chat: `https://ca-2-h9-ceai-teal.vercel.app/api/chat`
+
+The system prompt is loaded once per warm serverless instance. Update
+`api/system_prompt.txt` and redeploy to apply prompt changes consistently.
+
+Never commit `.env`, `.env.local`, `.vercel`, or a real API key.
 
 ## Enable GitHub Pages
 
-1. In the GitHub repository, open **Settings > Pages**.
-2. Under **Build and deployment**, choose **GitHub Actions** as the source.
-3. Push to `master`. The workflow publishes the frontend at
-   `https://luansandes.github.io/CA2-H9CEAI/`.
+1. Open **Settings > Pages** in the GitHub repository.
+2. Select **GitHub Actions** as the build and deployment source.
+3. Push to `master`.
+
+The workflow publishes only the four static frontend files at
+`https://luansandes.github.io/CA2-H9CEAI/`.
 
 ## API contract
 
@@ -53,7 +99,7 @@ Never commit `.env` or a real API key. `.env.example` contains names only.
 ```json
 {
   "messages": [
-    { "role": "user", "content": "Hello" }
+    { "role": "user", "content": "Show me kayak trips near Galway" }
   ]
 }
 ```
@@ -61,14 +107,33 @@ Never commit `.env` or a real API key. `.env.example` contains names only.
 Success response:
 
 ```json
-{ "message": "Hi! How can I help?" }
+{
+  "message": "Here are two live options near Galway.",
+  "offers": [
+    {
+      "tour_id": "ACT020",
+      "tour_name": "Kinvara Kayak & Castle Tour",
+      "category": "Kayak Trip",
+      "location": "Kinvara, Co. Galway",
+      "meeting_point": "Kinvara Quay",
+      "price_eur": "62",
+      "duration_hours": "3",
+      "capacity": "10",
+      "availability": "Apr-Oct",
+      "slots_this_week": "6",
+      "special_offer": "Early-bird 15% off before 9am",
+      "description": "Paddle across Galway Bay..."
+    }
+  ]
+}
 ```
 
-The backend keeps the most recent 20 validated messages per request. The browser
-owns conversation state; this scaffold does not persist chats or identify users.
+The backend validates and retains at most the 20 most recent messages per
+request. Upstream failures return a controlled JSON error.
 
-## Next production steps
+## Pilot limitations
 
-- Add abuse protection or authentication before sharing the endpoint broadly.
-- Add rate limits and request logging appropriate for your privacy requirements.
-- Pin dependencies after validating a deployment.
+- No bookings, payments, accounts, authentication, or persistent conversations
+- No production-grade rate limiting or abuse protection
+- No streaming responses
+- Weather forecasts are informational and can change
