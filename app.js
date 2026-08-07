@@ -15,7 +15,7 @@ const apiUrl =
     : defaultApiUrl;
 
 const welcomeMessage = [
-  "Hi, I’m Atlantic Coast Tours’ AI travel assistant. I can search our live tour catalogue, recommend experiences, explain current offers and availability, and check relevant weather forecasts when you share a date and location.",
+  "Hi, I’m Atlantic Coast Tours’ AI travel assistant. I can search our live tour catalogue, recommend experiences, and explain current offers and availability.",
   "My guidance is informational, and I can’t confirm bookings or payments.",
 ];
 
@@ -147,7 +147,7 @@ async function sendMessage(content) {
   addMessage("user", content);
   startersElement.hidden = true;
   setLoading(true);
-  statusElement.textContent = "Checking the live catalogue…";
+  statusElement.textContent = "Thinking…";
 
   try {
     const response = await fetch(apiUrl, {

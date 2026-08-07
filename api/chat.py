@@ -4,12 +4,13 @@ import json
 import os
 import re
 import time
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta, timezone
 from http.server import BaseHTTPRequestHandler
 from pathlib import Path
 from urllib.error import HTTPError, URLError
 from urllib.parse import urlencode
 from urllib.request import Request, urlopen
+from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from openai import OpenAI
 
@@ -56,6 +57,25 @@ CARD_FIELDS = (
 
 PROMPT_PATH = Path(__file__).with_name("system_prompt.txt")
 SYSTEM_PROMPT = PROMPT_PATH.read_text(encoding="utf-8").strip()
+
+
+def ireland_today():
+    try:
+        return datetime.now(ZoneInfo("Europe/Dublin")).date()
+    except ZoneInfoNotFoundError:
+        return datetime.now(timezone.utc).date()
+
+
+def system_instructions(today=None):
+    current_date = today or ireland_today()
+    date_context = current_date.strftime("%A, %d %B %Y")
+    return (
+        f"{SYSTEM_PROMPT}\n\n"
+        "Current date context\n"
+        f"- Today is {date_context} ({current_date.isoformat()}) in Europe/Dublin.\n"
+        "- Resolve relative dates such as today, tomorrow, this weekend, and next "
+        "Monday against this date."
+    )
 
 
 class TourDataError(RuntimeError):
@@ -359,7 +379,7 @@ def create_chat_response(messages, client=None):
     for round_index in range(MAX_TOOL_ROUNDS + 1):
         response = client.responses.create(
             model=os.environ.get("OPENAI_MODEL", "gpt-5.6-luna"),
-            instructions=SYSTEM_PROMPT,
+            instructions=system_instructions(),
             input=running_input,
             tools=TOOLS,
             tool_choice=(

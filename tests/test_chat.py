@@ -162,6 +162,12 @@ class FakeResponses:
 
 
 class ChatLoopTests(unittest.TestCase):
+    def test_system_instructions_include_current_irish_day_and_date(self):
+        instructions = chat.system_instructions(date(2026, 8, 10))
+        self.assertIn("Monday, 10 August 2026", instructions)
+        self.assertIn("2026-08-10", instructions)
+        self.assertIn("next Monday", instructions)
+
     def test_cards_are_hydrated_only_from_current_live_results(self):
         function_call = SimpleNamespace(
             type="function_call",
@@ -237,6 +243,11 @@ class FrontendContractTests(unittest.TestCase):
         self.assertIn("AI travel assistant", html)
         self.assertIn("can’t confirm bookings or payments", html)
         self.assertIn("data-prompt", html)
+        self.assertNotIn("check relevant weather forecasts", html)
+
+        with open("app.js", encoding="utf-8") as file:
+            javascript = file.read()
+        self.assertNotIn("Checking the live catalogue", javascript)
 
 
 if __name__ == "__main__":
