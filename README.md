@@ -13,6 +13,7 @@ and retrieves date-specific weather from Open-Meteo.
 - `api/system_prompt.txt`: inspectable assistant instructions, cached at cold start
 - `api/health.py`: lightweight deployment health check
 - `.github/workflows/pages.yml`: GitHub Pages deployment workflow
+- [`docs/atlantic-coast-tours-architecture.drawio`](docs/atlantic-coast-tours-architecture.drawio): editable diagrams.net solution architecture
 
 The browser retains the current conversation in memory. Chats are not persisted,
 and selecting an offer card continues the conversation rather than making a
