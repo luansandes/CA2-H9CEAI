@@ -385,6 +385,12 @@ def create_chat_response(messages, client=None):
             seen = set()
             requested_ids = list(result.get("offer_ids") or [])
             requested_ids.extend(re.findall(r"\bACT\d{3}\b", message, flags=re.IGNORECASE))
+            folded_message = message.casefold()
+            requested_ids.extend(
+                tour_id
+                for tour_id, row in live_rows.items()
+                if row.get("tour_name", "").casefold() in folded_message
+            )
             for tour_id in requested_ids:
                 tour_id = tour_id.upper()
                 if tour_id in seen or tour_id not in live_rows:

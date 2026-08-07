@@ -176,7 +176,7 @@ class ChatLoopTests(unittest.TestCase):
                     output=[],
                     output_text=json.dumps(
                         {
-                            "message": "Here is **ACT017**, the live cruise. ACT999 is unknown.",
+                            "message": "Here is the **Sunset Cruise**. ACT999 is unknown.",
                             "offer_ids": [],
                         }
                     ),
