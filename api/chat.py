@@ -23,7 +23,7 @@ ALLOWED_ROLES = {"user", "assistant"}
 
 SHEET_CSV_URL = (
     "https://docs.google.com/spreadsheets/d/"
-    "1balBGf8QhZ5dc-RCCAPt2kcrcf6m_YRh0HL_r8bBtJw/"
+    "1QO8OZvE52vX7ikssY8cQmkT871G_B0EjaSKC5qjYmPo/"
     "export?format=csv&gid=120683740"
 )
 REQUIRED_COLUMNS = {

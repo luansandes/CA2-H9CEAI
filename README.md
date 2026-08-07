@@ -22,7 +22,7 @@ booking.
 
 Tour data is read-only and comes from this public Google Sheet tab:
 
-`https://docs.google.com/spreadsheets/d/1balBGf8QhZ5dc-RCCAPt2kcrcf6m_YRh0HL_r8bBtJw/edit?gid=120683740`
+`https://docs.google.com/spreadsheets/d/1QO8OZvE52vX7ikssY8cQmkT871G_B0EjaSKC5qjYmPo/edit?gid=120683740`
 
 Every catalogue tool call issues a new GET request to the CSV export with
 no-cache headers and a unique query parameter. The application does not store,
